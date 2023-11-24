@@ -1,2 +1,1 @@
-export * from './comman.module';
-export * from './comman.service';
+export * from './database';
