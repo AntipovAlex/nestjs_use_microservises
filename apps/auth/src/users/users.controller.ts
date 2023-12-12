@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/createUsers.dto';
-import { UserDecorator } from '../decorators/user.decorator';
+import { UserDecorator } from '../../../../libs/comman/src/decorators/user.decorator';
 import { UsersDocument } from './models/users.schema';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
@@ -17,8 +17,6 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async getUser(@UserDecorator() currentUser: UsersDocument) {
-    console.log(111111, currentUser);
-
     return await currentUser;
   }
 }

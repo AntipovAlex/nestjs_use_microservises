@@ -1049,6 +1049,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/microservices@npm:^10.2.10":
+  version: 10.2.10
+  resolution: "@nestjs/microservices@npm:10.2.10"
+  dependencies:
+    iterare: "npm:1.2.1"
+    tslib: "npm:2.6.2"
+  peerDependencies:
+    "@grpc/grpc-js": "*"
+    "@nestjs/common": ^10.0.0
+    "@nestjs/core": ^10.0.0
+    "@nestjs/websockets": ^10.0.0
+    amqp-connection-manager: "*"
+    amqplib: "*"
+    cache-manager: "*"
+    ioredis: "*"
+    kafkajs: "*"
+    mqtt: "*"
+    nats: "*"
+    reflect-metadata: ^0.1.12
+    rxjs: ^7.1.0
+  peerDependenciesMeta:
+    "@grpc/grpc-js":
+      optional: true
+    "@nestjs/websockets":
+      optional: true
+    amqp-connection-manager:
+      optional: true
+    amqplib:
+      optional: true
+    cache-manager:
+      optional: true
+    ioredis:
+      optional: true
+    kafkajs:
+      optional: true
+    mqtt:
+      optional: true
+    nats:
+      optional: true
+  checksum: 419e727f1c46ff183fa4cb7ad7c5f817268b632b8e199d57787eafc84bb13faf32bac82bd87e06788d85f44ddbe34f3442cb33eba577da498fa30461a203f44f
+  languageName: node
+  linkType: hard
+
 "@nestjs/mongoose@npm:^10.0.2":
   version: 10.0.2
   resolution: "@nestjs/mongoose@npm:10.0.2"
@@ -5935,6 +5978,7 @@ __metadata:
     "@nestjs/core": "npm:^10.0.0"
     "@nestjs/jwt": "npm:^10.2.0"
     "@nestjs/mapped-types": "npm:*"
+    "@nestjs/microservices": "npm:^10.2.10"
     "@nestjs/mongoose": "npm:^10.0.2"
     "@nestjs/passport": "npm:^10.0.3"
     "@nestjs/platform-express": "npm:^10.0.0"
