@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateChargeDto } from './dto/createCharge.dto';
+import { CreateChargeDto } from '@app/comman';
 
 @Controller()
 export class PaymentsController {
