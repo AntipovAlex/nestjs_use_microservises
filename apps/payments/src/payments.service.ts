@@ -27,7 +27,12 @@ export class PaymentsService {
       automatic_payment_methods: { allow_redirects: 'never', enabled: true },
     });
 
-    this.notificationsService.emit('notify_email', { email });
+    console.log(12313132, email);
+
+    this.notificationsService.emit('notify_email', {
+      email,
+      text: `Your payment of $${amount} has completed succcessully`,
+    });
 
     return paymentIntent;
   }
