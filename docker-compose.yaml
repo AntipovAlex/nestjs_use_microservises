@@ -4,7 +4,7 @@ services:
   reservations:
     build:
       context: .
-      dockerfile: ./apps/reservations/Dockerfile
+      dockerfile: ./apps/reservations/dockerfile
       target: development
     command: pnpm run start:dev reservations
     env_file:

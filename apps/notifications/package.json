@@ -1,0 +1,10 @@
+{
+  "name": "notifications",
+  "packageManager": "yarn@4.0.2",
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.14"
+  }
+}

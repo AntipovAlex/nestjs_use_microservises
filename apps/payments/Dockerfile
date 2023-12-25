@@ -4,12 +4,16 @@ WORKDIR /usr/src/app
 
 COPY package.json ./
 COPY yarn.lock ./
+COPY tsconfig.json tsconfig.json
 
-RUN npm install -g pnpm
+RUN npm install yarn 
 
-RUN pnpm install
+RUN yarn install
 
-COPY . .
+COPY apps/payments apps/payments
+COPY libs libs
+
+RUN cd apps/payments && yarn install
 
 RUN yarn run build
 
@@ -23,10 +27,10 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN npm install -g pnpm
+RUN npm install yarn
 
-RUN pnpm install --prod
+RUN yarn install --prod
 
 COPY --from=development /usr/src/app/dist .dist
 
-CMD [ "node", "dist/app/payments/main" ]
+CMD [ "node", "dist/apps/payments/main" ]
