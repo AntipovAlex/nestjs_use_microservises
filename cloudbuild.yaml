@@ -1,81 +1,69 @@
 steps:
+  # Reservations
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'europe-central2-docker.pkg.dev/sleeper-408811/reservations/production',
+        '-f',
+        'apps/reservations/Dockerfile',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'europe-central2-docker.pkg.dev/sleeper-408811/reservations/production',
+      ]
 
+  # Auth
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/bq-to-ftp', '.' , '-f', 'Dockerfile']
-  # push the container image to Container Registry
+    args:
+      [
+        'build',
+        '-t',
+        'europe-central2-docker.pkg.dev/sleeper-408811/auth/production',
+        '-f',
+        'apps/auth/Dockerfile',
+        '.',
+      ]
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/bq-to-ftp']
-images:
-  - 'gcr.io/$PROJECT_ID/bq-to-ftp'
-  
-# Reservations
-  - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'build',
-      '-t',
-      'europe-central2-docker.pkg.dev/sleeper-408811/reservations/production',
-      '-f',
-      'apps/reservations/Dockerfile',
-      '.',
-    ]
-  - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'push',
-      'europe-central2-docker.pkg.dev/sleeper-408811/reservations/production'
-    ]
+    args:
+      ['push', 'europe-central2-docker.pkg.dev/sleeper-408811/auth/production']
 
-# Auth
+  # Notifications
   - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'build',
-      '-t',
-      'europe-central2-docker.pkg.dev/sleeper-408811/auth/production',
-      '-f',
-      'apps/auth/Dockerfile',
-      '.',
-    ]
+    args:
+      [
+        'build',
+        '-t',
+        'europe-central2-docker.pkg.dev/sleeper-408811/notifications/production',
+        '-f',
+        'apps/notifications/Dockerfile',
+        '.',
+      ]
   - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'push',
-      'europe-central2-docker.pkg.dev/sleeper-408811/auth/production'
-    ]
+    args:
+      [
+        'push',
+        'europe-central2-docker.pkg.dev/sleeper-408811/notifications/production',
+      ]
 
-# Notifications
+  # Payments
   - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'build',
-      '-t',
-      'europe-central2-docker.pkg.dev/sleeper-408811/notifications/production',
-      '-f',
-      'apps/notifications/Dockerfile',
-      '.',
-    ]
+    args:
+      [
+        'build',
+        '-t',
+        'europe-central2-docker.pkg.dev/sleeper-408811/payments/production',
+        '-f',
+        'apps/payments/Dockerfile',
+        '.',
+      ]
   - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'push',
-      'europe-central2-docker.pkg.dev/sleeper-408811/notifications/production'
-    ]
-
-# Payments
-  - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'build',
-      '-t',
-      'europe-central2-docker.pkg.dev/sleeper-408811/payments/production',
-      '-f',
-      'apps/payments/Dockerfile',
-      '.',
-    ]
-  - name: 'gcr.io/cloud-builders/docker'
-   args:
-    [
-      'push',
-      'europe-central2-docker.pkg.dev/sleeper-408811/payments/production'
-    ]
+    args:
+      [
+        'push',
+        'europe-central2-docker.pkg.dev/sleeper-408811/payments/production',
+      ]
