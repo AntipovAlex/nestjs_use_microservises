@@ -1,7 +1,7 @@
 steps:
 
 # Reservations
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'build',
@@ -11,7 +11,7 @@ steps:
       'apps/reservations/Dockerfile',
       '.',
     ]
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'push',
@@ -19,7 +19,7 @@ steps:
     ]
 
 # Auth
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'build',
@@ -29,7 +29,7 @@ steps:
       'apps/auth/Dockerfile',
       '.',
     ]
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'push',
@@ -37,7 +37,7 @@ steps:
     ]
 
 # Notifications
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'build',
@@ -47,7 +47,7 @@ steps:
       'apps/notifications/Dockerfile',
       '.',
     ]
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'push',
@@ -55,7 +55,7 @@ steps:
     ]
 
 # Payments
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'build',
@@ -65,7 +65,7 @@ steps:
       'apps/payments/Dockerfile',
       '.',
     ]
-  -name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
    args:
     [
       'push',
