@@ -17,3 +17,17 @@ spec:
       containers:
         - image: europe-central2-docker.pkg.dev/sleeper-408811/payments/production
           name: payments
+          env:
+            - name: PORT
+              value: '3001'
+            - name: NOTIFICATIONS_HOST
+              value: notifications
+            - name: NOTIFICATIONS_PORT
+              value: '3004'
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe
+                  key: apikey
+          ports:
+            - containerPort: 3001
