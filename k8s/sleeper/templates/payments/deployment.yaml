@@ -19,15 +19,15 @@ spec:
           name: payments
           env:
             - name: PORT
-              value: '3001'
+              value: "3001"
             - name: NOTIFICATIONS_HOST
               value: notifications
             - name: NOTIFICATIONS_PORT
-              value: '3004'
+              value: "3004"
             - name: STRIPE_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: stripe
-                  key: apikey
+                  key: apiKey
           ports:
             - containerPort: 3001

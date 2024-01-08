@@ -19,7 +19,7 @@ spec:
           name: notifications
           env:
             - name: PORT
-              value: '3000'
+              value: "3000"
             - name: SMTP_USER
               value: bookingsleeper@gmail.com
             - name: GOOGLE_OAUTH_CLIENT_ID
@@ -28,7 +28,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: google
-                  key: clientSecrect
+                  key: clientSecret
             - name: GOOGLE_OAUTH_REFRESH_TOKEN
               valueFrom:
                 secretKeyRef:
