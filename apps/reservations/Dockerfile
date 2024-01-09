@@ -6,6 +6,7 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json tsconfig.json
 COPY nest-cli.json nest-cli.json
+COPY . .
 
 RUN npm install yarn
 
@@ -14,7 +15,7 @@ RUN yarn install
 COPY apps/reservations apps/reservations
 COPY libs libs
 
-RUN yarn run build reservations
+RUN yarn run build 
 
 FROM node:alpine as production
 
@@ -30,6 +31,6 @@ RUN npm install yarn
 
 RUN yarn install --prod
 
-COPY --from=development /usr/src/app/dist .dist
+COPY --from=development /usr/src/app/dist ./dist
 
 CMD [ "node", "dist/apps/reservations/main" ]

@@ -6,6 +6,7 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json tsconfig.json
 COPY nest-cli.json nest-cli.json
+COPY . .
 
 RUN npm install yarn
 
@@ -14,9 +15,7 @@ RUN yarn install
 COPY apps/auth apps/auth
 COPY libs libs
 
-RUN cd apps/auth && yarn install
-
-RUN yarn run build auth
+RUN yarn run build 
 
 FROM node:alpine as production
 
@@ -32,6 +31,6 @@ RUN npm install yarn
 
 RUN yarn install --prod
 
-COPY --from=development /usr/src/app/dist .dist
+COPY --from=development /usr/src/app/dist ./dist
 
 CMD [ "node", "dist/apps/auth/main" ]
