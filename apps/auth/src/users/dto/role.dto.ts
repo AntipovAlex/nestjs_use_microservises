@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 export class RoleDto {
   @IsNumber()
   @IsOptional()
-  id?: number;
+  _id?: number;
 
   @IsString()
   @IsOptional()
