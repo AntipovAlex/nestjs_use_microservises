@@ -18,8 +18,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.number().required(),
-        HTTP_PORT: Joi.number().required(),
-        TCP_PORT: Joi.number().required(),
       }),
     }),
     JwtModule.registerAsync({

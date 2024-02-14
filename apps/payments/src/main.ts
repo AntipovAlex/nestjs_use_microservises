@@ -3,17 +3,19 @@ import { PaymentsModule } from './payments.module';
 import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
 import { Logger } from 'nestjs-pino';
+import { PAYMENTS_PACKAGE_NAME } from '@app/comman';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(PaymentsModule);
 
   const configService = app.get(ConfigService);
   app.connectMicroservice({
-    transport: Transport.RMQ,
+    transport: Transport.GRPC,
     options: {
-      urls: [configService.getOrThrow('RABBITMQ_URI')],
-      noAck: false,
-      queue: 'payments',
+      package: PAYMENTS_PACKAGE_NAME,
+      url: configService.getOrThrow('PAYMENTS_GRPC_URL'),
+      protoPath: join(__dirname, '../../../proto/payments.proto'),
     },
   });
 

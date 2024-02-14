@@ -21,11 +21,11 @@ export interface CreateChargeResponse {
 
 export const PAYMENTS_PACKAGE_NAME = 'payments';
 
-export interface PaymentsClient {
+export interface PaymentsServiceClient {
   createCharge(request: CreateChargeMessage): Observable<CreateChargeResponse>;
 }
 
-export interface PaymentsController {
+export interface PaymentsServiceController {
   createCharge(
     request: CreateChargeMessage,
   ):
@@ -34,7 +34,7 @@ export interface PaymentsController {
     | CreateChargeResponse;
 }
 
-export function PaymentsControllerMethods() {
+export function PaymentsServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ['createCharge'];
     for (const method of grpcMethods) {
@@ -42,7 +42,7 @@ export function PaymentsControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcMethod('Payments', method)(
+      GrpcMethod('PaymentsService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -54,7 +54,7 @@ export function PaymentsControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcStreamMethod('Payments', method)(
+      GrpcStreamMethod('PaymentsService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -63,4 +63,4 @@ export function PaymentsControllerMethods() {
   };
 }
 
-export const PAYMENTS_SERVICE_NAME = 'Payments';
+export const PAYMENTS_SERVICE_NAME = 'PaymentsService';

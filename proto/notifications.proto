@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package notifications;
 
-service Notifications{
+service NotificationsService{
     rpc NotifyEmail(NotifyEmailMessage) returns (Empty){}
 }
 

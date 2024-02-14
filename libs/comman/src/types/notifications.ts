@@ -11,17 +11,17 @@ export interface Empty {}
 
 export const NOTIFICATIONS_PACKAGE_NAME = 'notifications';
 
-export interface NotificationsClient {
+export interface NotificationsServiceClient {
   notifyEmail(request: NotifyEmailMessage): Observable<Empty>;
 }
 
-export interface NotificationsController {
+export interface NotificationsServiceController {
   notifyEmail(
     request: NotifyEmailMessage,
   ): Promise<Empty> | Observable<Empty> | Empty;
 }
 
-export function NotificationsControllerMethods() {
+export function NotificationsServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ['notifyEmail'];
     for (const method of grpcMethods) {
@@ -29,7 +29,7 @@ export function NotificationsControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcMethod('Notifications', method)(
+      GrpcMethod('NotificationsService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -41,7 +41,7 @@ export function NotificationsControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcStreamMethod('Notifications', method)(
+      GrpcStreamMethod('NotificationsService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -50,4 +50,4 @@ export function NotificationsControllerMethods() {
   };
 }
 
-export const NOTIFICATIONS_SERVICE_NAME = 'Notifications';
+export const NOTIFICATIONS_SERVICE_NAME = 'NotificationsService';
