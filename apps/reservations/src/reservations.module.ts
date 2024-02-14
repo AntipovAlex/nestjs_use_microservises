@@ -2,17 +2,20 @@ import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import {
+  AUTH_PACKAGE_NAME,
+  AUTH_SERVICE_NAME,
   DatabaseModule,
   HealthModule,
   LoggerModule,
-  PAYMENTS_SERVICE,
+  PAYMENTS_PACKAGE_NAME,
+  PAYMENTS_SERVICE_NAME,
 } from '@app/comman';
 import { ReservationRepository } from './reservations.repository';
 import { ReservationEntity } from './models/reservation.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTH_SERVICE } from '@app/comman';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,31 +26,29 @@ import { AUTH_SERVICE } from '@app/comman';
       isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
-        AUTH_PORT: Joi.number().required(),
-        AUTH_HOST: Joi.string().required(),
-        PAYMENTS_PORT: Joi.number().required(),
-        PAYMENTS_HOST: Joi.string().required(),
       }),
     }),
     ClientsModule.registerAsync([
       {
-        name: AUTH_SERVICE,
+        name: AUTH_SERVICE_NAME,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
+          transport: Transport.GRPC,
           options: {
-            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'auth',
+            package: AUTH_PACKAGE_NAME,
+            url: configService.getOrThrow('AUTH_GRPC_URL'),
+            protoPath: join(__dirname, '../../../proto/auth.proto'),
           },
         }),
         inject: [ConfigService],
       },
       {
-        name: PAYMENTS_SERVICE,
+        name: PAYMENTS_SERVICE_NAME,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
+          transport: Transport.GRPC,
           options: {
-            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-            queue: 'payments',
+            package: PAYMENTS_PACKAGE_NAME,
+            url: configService.getOrThrow('PAYMENTS_GRPC_URL'),
+            protoPath: join(__dirname, '../../../proto/payments.proto'),
           },
         }),
         inject: [ConfigService],

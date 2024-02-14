@@ -1,28 +1,18 @@
 import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import {
-  Ctx,
-  MessagePattern,
-  Payload,
-  RmqContext,
-} from '@nestjs/microservices';
 import { PaymentsCreateChargeDto } from './dto/paymentCreateCharge.dto';
+import {
+  PaymentsServiceController,
+  PaymentsServiceControllerMethods,
+} from '@app/comman';
 
 @Controller()
-export class PaymentsController {
+@PaymentsServiceControllerMethods()
+export class PaymentsController implements PaymentsServiceController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @MessagePattern('create_charge')
   @UsePipes(new ValidationPipe())
-  async createCharge(
-    @Payload() data: PaymentsCreateChargeDto,
-    @Ctx() contex: RmqContext,
-  ) {
-    const channel = contex.getChannelRef();
-    const originMsg = contex.getMessage();
-
-    channel.ack(originMsg);
-
+  async createCharge(data: PaymentsCreateChargeDto) {
     return await this.paymentsService.createCharge(data);
   }
 }
