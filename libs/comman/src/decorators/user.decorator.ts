@@ -4,7 +4,7 @@ import { UsersDocument } from '../models';
 export const UserDecorator = createParamDecorator(
   (data: any, context: ExecutionContext): UsersDocument => {
     const request = context.switchToHttp().getRequest();
-    if (context.getType() == 'http') {
+    if (context.getType() === 'http') {
       return request.user;
     }
 

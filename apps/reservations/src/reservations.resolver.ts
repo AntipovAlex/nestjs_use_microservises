@@ -14,8 +14,6 @@ export class ReservationsResolver {
     createReservationInput: CreateReservationDto,
     @UserDecorator() user: User,
   ) {
-    console.log(77777777, user);
-
     return this.reservationsService.create(createReservationInput, user);
   }
 
