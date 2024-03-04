@@ -1,57 +1,61 @@
-import { AbstractEntity } from './abstract.entity';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
+import { AbstractDocument } from './abstract.schema';
 import { Logger, NotFoundException } from '@nestjs/common';
-import {
-  EntityManager,
-  FindOptionsRelations,
-  FindOptionsWhere,
-  Repository,
-} from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export class AbstractRepository<T extends AbstractEntity<T>> {
+export class AbstractRepository<TDocument extends AbstractDocument> {
   protected readonly logger: Logger;
-  constructor(
-    private readonly entityReporitory: Repository<T>,
-    private readonly entityManager: EntityManager,
-  ) {}
+  constructor(protected readonly model: Model<TDocument>) {}
 
-  async create(entite: T): Promise<T> {
-    return this.entityManager.save(entite);
+  async create(document: Omit<TDocument, '_id'>): Promise<TDocument> {
+    const createDocument = new this.model({
+      ...document,
+      _id: new Types.ObjectId(),
+    });
+
+    return (await createDocument.save()).toJSON() as TDocument;
   }
 
-  async findOne(
-    where: FindOptionsWhere<T>,
-    relations?: FindOptionsRelations<T>,
-  ): Promise<T> {
-    const entite = await this.entityReporitory.findOne({ where, relations });
+  async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
+    const document = await this.model.findOne(filterQuery, {}, { lean: true });
 
-    if (!entite) {
-      this.logger.warn("Entity don't find with where", entite);
-      throw new NotFoundException("Entity don't find");
+    if (!document) {
+      this.logger.warn("Document don't find with filterQuery", filterQuery);
+      throw new NotFoundException("Document don't find");
     }
 
-    return entite;
+    return document as TDocument;
   }
 
   async findOneAndUpdate(
-    where: FindOptionsWhere<T>,
-    partialEntity: QueryDeepPartialEntity<T>,
-  ): Promise<T> {
-    const updateResult = this.entityReporitory.update(where, partialEntity);
+    filterQuery: FilterQuery<TDocument>,
+    update: UpdateQuery<TDocument>,
+  ): Promise<TDocument> {
+    const document = await this.model.findOneAndUpdate(filterQuery, update, {
+      lean: true,
+      new: true,
+    });
 
-    if (!(await updateResult).affected) {
-      this.logger.warn("Entity don't find with where", where);
-      throw new NotFoundException("Entity don't find");
+    if (!document) {
+      this.logger.warn("Document don't find with filterQuery", filterQuery);
+      throw new NotFoundException("Document don't find");
     }
 
-    return this.findOne(where);
+    return document as TDocument;
   }
 
-  async find(where: FindOptionsWhere<T>): Promise<T[]> {
-    return this.entityReporitory.findBy(where);
+  async find(filterQuery: FilterQuery<TDocument>): Promise<TDocument[]> {
+    return (await this.model.find(
+      filterQuery,
+      {},
+      { lean: true },
+    )) as TDocument[];
   }
 
-  async findOneAndDelete(where: FindOptionsWhere<T>) {
-    await this.entityReporitory.delete(where);
+  async findOneAndDelete(
+    filterQuery: FilterQuery<TDocument>,
+  ): Promise<TDocument> {
+    return (await this.model.findOneAndDelete(filterQuery, {
+      lean: true,
+    })) as TDocument;
   }
 }

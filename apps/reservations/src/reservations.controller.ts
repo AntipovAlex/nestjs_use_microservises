@@ -11,7 +11,7 @@ import {
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/createReservation.dto';
 import { UpdateReservationDto } from './dto/updateReservation.dto';
-import { JwtAuthGuard, UserDecorator, UsersEntity, Roles } from '@app/comman';
+import { JwtAuthGuard, UserDecorator, User, Roles } from '@app/comman';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -21,7 +21,7 @@ export class ReservationsController {
   @Post()
   async create(
     @Body() createReservationDto: CreateReservationDto,
-    @UserDecorator() currentUser: UsersEntity,
+    @UserDecorator() currentUser: User,
   ) {
     return await this.reservationsService.create(
       createReservationDto,
@@ -38,7 +38,7 @@ export class ReservationsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.reservationsService.findOne(+id);
+    return await this.reservationsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -47,13 +47,13 @@ export class ReservationsController {
     @Param('id') id: string,
     @Body() updateReservationDto: UpdateReservationDto,
   ) {
-    return await this.reservationsService.update(+id, updateReservationDto);
+    return await this.reservationsService.update(id, updateReservationDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Roles('Admin')
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.reservationsService.remove(+id);
+    return await this.reservationsService.remove(id);
   }
 }

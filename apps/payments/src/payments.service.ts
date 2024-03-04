@@ -1,20 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
-import {
-  NOTIFICATIONS_SERVICE_NAME,
-  NotificationsServiceClient,
-} from '@app/comman';
-import { ClientGrpc } from '@nestjs/microservices';
+import { NOTIFICATIONS_SERVICE } from '@app/comman';
+import { ClientProxy } from '@nestjs/microservices';
 import { PaymentsCreateChargeDto } from './dto/paymentCreateCharge.dto';
 
 @Injectable()
 export class PaymentsService {
-  private notificationsService: NotificationsServiceClient;
   constructor(
     private readonly configService: ConfigService,
-    @Inject(NOTIFICATIONS_SERVICE_NAME)
-    private readonly client: ClientGrpc,
+    @Inject(NOTIFICATIONS_SERVICE)
+    private readonly notificationsService: ClientProxy,
   ) {}
 
   private readonly stripe = new Stripe(
@@ -31,20 +27,16 @@ export class PaymentsService {
       automatic_payment_methods: { allow_redirects: 'never', enabled: true },
     });
 
-    if (!this.notificationsService) {
-      this.notificationsService =
-        this.client.getService<NotificationsServiceClient>(
-          NOTIFICATIONS_SERVICE_NAME,
-        );
-    }
-
-    this.notificationsService
-      .notifyEmail({
-        email,
-        text: `Your payment of $${amount} has completed succcessully`,
-      })
-      .subscribe(() => {});
+    this.notificationsService.emit('notify_email', {
+      email,
+      text: `Your payment of $${amount} has completed succcessully`,
+    });
 
     return paymentIntent;
+  }
+
+  async getPayments() {
+    const payments = await this.stripe.paymentIntents.list();
+    return payments.data;
   }
 }

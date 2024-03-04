@@ -7,3 +7,4 @@ export * from './dto';
 export * from './models';
 export * from './health';
 export * from './types';
+export * from './interface';

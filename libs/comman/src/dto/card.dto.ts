@@ -1,19 +1,24 @@
+import { Field, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { CardMessage } from '../types';
 
-export class CardDto implements CardMessage {
+@InputType()
+export class CardDto {
   @IsString()
+  @Field()
   cvc: string;
 
   @IsNumber()
   @IsNotEmpty()
-  expMonth: number;
+  @Field()
+  exp_month: number;
 
   @IsNumber()
   @IsNotEmpty()
-  expYear: number;
+  @Field()
+  exp_year: number;
 
   @IsString()
   @IsNotEmpty()
+  @Field()
   number: string;
 }

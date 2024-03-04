@@ -2,53 +2,70 @@ import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import {
-  AUTH_PACKAGE_NAME,
-  AUTH_SERVICE_NAME,
   DatabaseModule,
   HealthModule,
   LoggerModule,
-  PAYMENTS_PACKAGE_NAME,
-  PAYMENTS_SERVICE_NAME,
+  PAYMENTS_SERVICE,
 } from '@app/comman';
 import { ReservationRepository } from './reservations.repository';
-import { ReservationEntity } from './models/reservation.entity';
+import {
+  ReservationDocument,
+  ReservationSchema,
+} from './models/reservation.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import { AUTH_SERVICE } from '@app/comman';
+import { GraphQLModule } from '@nestjs/graphql';
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
+import { ReservationsResolver } from './reservations.resolver';
 
 @Module({
   imports: [
     DatabaseModule,
-    DatabaseModule.forFeature([ReservationEntity]),
+    DatabaseModule.forFeature([
+      { name: ReservationDocument.name, schema: ReservationSchema },
+    ]),
     LoggerModule,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
+      autoSchemaFile: {
+        federation: 2,
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
+        MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
+        AUTH_PORT: Joi.number().required(),
+        AUTH_HOST: Joi.string().required(),
+        PAYMENTS_PORT: Joi.number().required(),
+        PAYMENTS_HOST: Joi.string().required(),
       }),
     }),
     ClientsModule.registerAsync([
       {
-        name: AUTH_SERVICE_NAME,
+        name: AUTH_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.GRPC,
+          transport: Transport.TCP,
           options: {
-            package: AUTH_PACKAGE_NAME,
-            url: configService.getOrThrow('AUTH_GRPC_URL'),
-            protoPath: join(__dirname, '../../../proto/auth.proto'),
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
           },
         }),
         inject: [ConfigService],
       },
       {
-        name: PAYMENTS_SERVICE_NAME,
+        name: PAYMENTS_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.GRPC,
+          transport: Transport.TCP,
           options: {
-            package: PAYMENTS_PACKAGE_NAME,
-            url: configService.getOrThrow('PAYMENTS_GRPC_URL'),
-            protoPath: join(__dirname, '../../../proto/payments.proto'),
+            host: configService.get('PAYMENTS_HOST'),
+            port: configService.get('PAYMENTS_PORT'),
           },
         }),
         inject: [ConfigService],
@@ -58,6 +75,6 @@ import { join } from 'path';
   ],
 
   controllers: [ReservationsController],
-  providers: [ReservationsService, ReservationRepository],
+  providers: [ReservationsService, ReservationRepository, ReservationsResolver],
 })
 export class ReservationsModule {}

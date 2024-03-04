@@ -49,7 +49,15 @@ services:
       - ./apps/notifications/.env
     volumes:
       - .:/usr/src/app
-  rabbitmq:
-    image: rabbitmq
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+      target: development
+    command: yarn run start:dev gateway
+    env_file:
+      - ./apps/gateway/.env
+    volumes:
+      - .:/usr/src/app
     ports:
-      - 5672:5672
+      - '3004:3004'

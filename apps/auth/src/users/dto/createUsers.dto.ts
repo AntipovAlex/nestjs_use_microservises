@@ -1,26 +1,26 @@
+import { Field, InputType } from '@nestjs/graphql';
 import {
   IsArray,
   IsEmail,
   IsNotEmpty,
   IsOptional,
   IsStrongPassword,
-  ValidateNested,
 } from 'class-validator';
-import { RoleDto } from './role.dto';
-import { Type } from 'class-transformer';
 
+@InputType()
 export class CreateUsersDto {
   @IsEmail()
   @IsNotEmpty()
+  @Field()
   email: string;
 
   @IsNotEmpty()
   @IsStrongPassword()
+  @Field()
   password: string;
 
   @IsOptional()
   @IsArray()
-  @ValidateNested()
-  @Type(() => RoleDto)
-  roles?: RoleDto[];
+  @Field(() => [String], { nullable: true })
+  roles?: string[];
 }
