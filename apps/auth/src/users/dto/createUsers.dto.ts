@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsString,
   IsStrongPassword,
 } from 'class-validator';
 
@@ -21,8 +20,6 @@ export class CreateUsersDto {
   password: string;
 
   @IsOptional()
-  @IsString({ each: true })
-  @IsNotEmpty({ each: true })
   @IsArray()
   @Field(() => [String], { nullable: true })
   roles?: string[];

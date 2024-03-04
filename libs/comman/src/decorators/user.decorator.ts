@@ -1,8 +1,8 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import { UsersDocument } from '../models';
+import { UsersEntity } from '../models';
 
 export const UserDecorator = createParamDecorator(
-  (data: any, context: ExecutionContext): UsersDocument => {
+  (data: any, context: ExecutionContext): UsersEntity => {
     const request = context.switchToHttp().getRequest();
     if (context.getType() === 'http') {
       return request.user;
